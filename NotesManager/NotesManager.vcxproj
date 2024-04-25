@@ -147,9 +147,6 @@
     <EmbeddedResource Include="NewNote.resx">
       <DependentUpon>NewNote.h</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Password.resx">
-      <DependentUpon>Password.h</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="TextWindow.resx">
       <DependentUpon>TextWindow.h</DependentUpon>
     </EmbeddedResource>

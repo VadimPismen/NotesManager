@@ -12,7 +12,7 @@ namespace NotesManager {
 	using namespace System::Drawing;
 
 	/// <summary>
-	/// РЎРІРѕРґРєР° РґР»СЏ Password
+	/// Сводка для Password
 	/// </summary>
 	public ref class Password : public System::Windows::Forms::Form
 	{
@@ -22,13 +22,13 @@ namespace NotesManager {
 			InitializeComponent();
 			note = a_note;
 			//
-			//TODO: РґРѕР±Р°РІСЊС‚Рµ РєРѕРґ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂР°
+			//TODO: добавьте код конструктора
 			//
 		}
 
 	protected:
 		/// <summary>
-		/// РћСЃРІРѕР±РѕРґРёС‚СЊ РІСЃРµ РёСЃРїРѕР»СЊР·СѓРµРјС‹Рµ СЂРµСЃСѓСЂСЃС‹.
+		/// Освободить все используемые ресурсы.
 		/// </summary>
 		~Password()
 		{
@@ -40,7 +40,7 @@ namespace NotesManager {
 
 	private:
 		/// <summary>
-		/// РћР±СЏР·Р°С‚РµР»СЊРЅР°СЏ РїРµСЂРµРјРµРЅРЅР°СЏ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂР°.
+		/// Обязательная переменная конструктора.
 		/// </summary>
 		System::ComponentModel::Container^ components;
 	private: System::Windows::Forms::TextBox^ PasBox;
@@ -52,8 +52,8 @@ namespace NotesManager {
 
 #pragma region Windows Form Designer generated code
 		   /// <summary>
-		   /// РўСЂРµР±СѓРµРјС‹Р№ РјРµС‚РѕРґ РґР»СЏ РїРѕРґРґРµСЂР¶РєРё РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂР° вЂ” РЅРµ РёР·РјРµРЅСЏР№С‚Рµ 
-		   /// СЃРѕРґРµСЂР¶РёРјРѕРµ СЌС‚РѕРіРѕ РјРµС‚РѕРґР° СЃ РїРѕРјРѕС‰СЊСЋ СЂРµРґР°РєС‚РѕСЂР° РєРѕРґР°.
+		   /// Требуемый метод для поддержки конструктора — не изменяйте 
+		   /// содержимое этого метода с помощью редактора кода.
 		   /// </summary>
 		   void InitializeComponent(void)
 		   {
@@ -79,7 +79,7 @@ namespace NotesManager {
 			   this->label1->Name = L"label1";
 			   this->label1->Size = System::Drawing::Size(91, 13);
 			   this->label1->TabIndex = 1;
-			   this->label1->Text = L"Р’РІРµРґРёС‚Рµ РїР°СЂРѕР»СЊ:";
+			   this->label1->Text = L"Введите пароль:";
 			   this->label1->Click += gcnew System::EventHandler(this, &Password::label1_Click);
 			   // 
 			   // button1
@@ -88,7 +88,7 @@ namespace NotesManager {
 			   this->button1->Name = L"button1";
 			   this->button1->Size = System::Drawing::Size(88, 23);
 			   this->button1->TabIndex = 2;
-			   this->button1->Text = L"Р’РІРѕРґ";
+			   this->button1->Text = L"Ввод";
 			   this->button1->UseVisualStyleBackColor = true;
 			   this->button1->Click += gcnew System::EventHandler(this, &Password::button1_Click);
 			   // 
@@ -99,7 +99,7 @@ namespace NotesManager {
 			   this->button2->Name = L"button2";
 			   this->button2->Size = System::Drawing::Size(95, 23);
 			   this->button2->TabIndex = 3;
-			   this->button2->Text = L"РћС‚РјРµРЅРёС‚СЊ";
+			   this->button2->Text = L"Отменить";
 			   this->button2->UseVisualStyleBackColor = true;
 			   this->button2->Click += gcnew System::EventHandler(this, &Password::button2_Click);
 			   // 
@@ -132,40 +132,40 @@ namespace NotesManager {
 	}
 	private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
 
-		String^ key = this->PasBox->Text; // Р’Р·СЏС‚РёРµ РїР°СЂРѕР»СЏ РёР· РїРѕР»СЏ РІРІРѕРґР°
+		String^ key = this->PasBox->Text; // Взятие пароля из поля ввода
 		IO::StreamReader^ din;
 		try {
 			din = IO::File::OpenText(String::Concat("notes/", note, ".txt"));
 		}
-		catch (System::IO::IOException^ error) { // РќР° СЃР»СѓС‡Р°Р№, РµСЃР»Рё С„Р°Р№Р» РІРѕ РІСЂРµРјСЏ РІРІРѕРґР° РїР°СЂРѕР»СЏ Р±СѓРґРµС‚ СѓРґР°Р»С‘РЅ
+		catch (System::IO::IOException^ error) { // На случай, если файл во время ввода пароля будет удалён
 			System::Windows::Forms::DialogResult result = System::Windows::Forms::MessageBox::Show(
-				"РџРѕС…РѕР¶Рµ, С„Р°Р№Р» СѓРґР°Р»С‘РЅ",
-				"РћС€РёР±РєР°",
+				"Похоже, файл удалён",
+				"Ошибка",
 				System::Windows::Forms::MessageBoxButtons::OK,
 				System::Windows::Forms::MessageBoxIcon::Error);
 			this->Close();
 			return;
 		}
-		if (key->Length == 0 || din->BaseStream->Length <= key->Length) { // Рђ РІРґСЂСѓРі РїР°СЂРѕР»СЊ РїСѓСЃС‚РѕР№ РёР»Рё Рё РІРѕРІСЃРµ Р±РѕР»СЊС€Рµ СЃР°РјРѕРіРѕ С„Р°Р№Р»Р°?
+		if (key->Length == 0 || din->BaseStream->Length <= key->Length) { // А вдруг пароль пустой или и вовсе больше самого файла?
 			return;
 		}
-		Char checksum = 0; // Р­С‚РѕС‚ СЃРёРјРІРѕР» Р±СѓРґРµС‚ СЃРѕСЃС‚Р°РІР»СЏС‚СЊ СЃСѓРјРјСѓ РєРѕРґРѕРІ РІСЃРµС… СЃРёРјРІРѕР»РѕРІ РїР°СЂРѕР»СЏ. РќСѓР¶РµРЅ РґР»СЏ РїСЂРѕРІРµСЂРєРё
+		Char checksum = 0; // Этот символ будет составлять сумму кодов всех символов пароля. Нужен для проверки
 		for (int i = 0; i < key->Length; i++)
 			checksum += key[i];
 		String^ checkedkey = String::Concat(checksum, key);
 
-		String^ checkedkeyencr; // РЁРёС„СЂРѕРІР°РЅРёРµ СЃС‚СЂРѕРєРё СЃ РїСЂРѕРІРµСЂРѕС‡РЅС‹Рј СЃРёРјРІРѕР»РѕРј Рё СЃР°РјРёРј РїР°СЂРѕР»РµРј
+		String^ checkedkeyencr; // Шифрование строки с проверочным символом и самим паролем
 		for (int i = 0; i < checkedkey->Length; i++)
 			checkedkeyencr = String::Concat(checkedkeyencr, Char(checkedkey[i] ^ key[i % key->Length]));
 
-		String^ checkstring; // Р§С‚РµРЅРёРµ РїСЂРѕРІРµСЂРѕС‡РЅРѕРіРѕ СЃРёРјРІРѕР»Р° Рё Р·Р°С€РёС„СЂРѕРІР°РЅРЅРѕРіРѕ РїР°СЂРѕР»СЏ РёР· С„Р°Р№Р»Р°
+		String^ checkstring; // Чтение проверочного символа и зашифрованного пароля из файла
 		for (int i = 0; i < checkedkeyencr->Length; i++)
 			checkstring = String::Concat(checkstring, Char(din->Read()));
 		din->Close();
 
-		if (String::Equals(checkedkeyencr, checkstring)) { // Р•СЃР»Рё СЃРѕРІРїР°РґР°РµС‚, С‚Рѕ РїР°СЂРѕР»СЊ РІРµСЂРЅС‹Р№
+		if (String::Equals(checkedkeyencr, checkstring)) { // Если совпадает, то пароль верный
 			this->Hide();
-			TextWindow^ text = gcnew TextWindow(String::Concat(note, ".txt"), key, checkedkeyencr); // РћС‚РєСЂС‹С‚РёРµ СЂРµРґР°РєС‚РѕСЂР° С‚РµРєСЃС‚Р°
+			TextWindow^ text = gcnew TextWindow(String::Concat(note, ".txt"), key, checkedkeyencr); // Открытие редактора текста
 			text->ShowDialog(ParentForm);
 			this->Close();
 		}
@@ -173,7 +173,7 @@ namespace NotesManager {
 	}
 	private: System::Void Password_Load(System::Object^ sender, System::EventArgs^ e) {
 	}
-	private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e) { // Р—Р°РєСЂС‹С‚СЊ РѕРєРЅРѕ РІРІРѕРґР° РїР°СЂРѕР»СЏ
+	private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e) { // Закрыть окно ввода пароля
 		this->Close();
 	}
 	};
