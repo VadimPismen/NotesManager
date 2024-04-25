@@ -147,6 +147,9 @@ namespace NotesManager {
 #pragma endregion
 	private: System::Void NameOfNote_TextChanged(System::Object^ sender, System::EventArgs^ e) {
 	}
+		   /* В качестве имени новой заметки по умолчанию используется время
+		   * в момент создания заметки
+		   */
 	private: System::Void NewNote_Load(System::Object^ sender, System::EventArgs^ e) {
 		DateTime^ DateTimeNow = gcnew DateTime;
 		DateTimeNow = DateTime::Now;
@@ -154,12 +157,12 @@ namespace NotesManager {
 	}
 	private: System::Void label1_Click(System::Object^ sender, System::EventArgs^ e) {
 	}
-	private: System::Void SaveButton_Click(System::Object^ sender, System::EventArgs^ e) {
+	private: System::Void SaveButton_Click(System::Object^ sender, System::EventArgs^ e) { // Сохранение заметки
 		String^ filename = this->NameOfNote->Text;
 		String^ data = this->TextEditor->Text;
 		String^ key = this->Password->Text;
-		if (filename != "" && key->Length > 0) {
-			if (System::IO::File::Exists(String::Concat("notes/", filename, ".txt"))) {
+		if (filename != "" && key->Length > 0) { // Имя файла и пароль не должны быть пустыми
+			if (System::IO::File::Exists(String::Concat("notes/", filename, ".txt"))) {  // А вдруг есть заметка с таким же именем?
 				System::Windows::Forms::DialogResult result = System::Windows::Forms::MessageBox::Show(
 					"Вы хотите перезаписать файл?",
 					"Подтверждение перезаписи",
@@ -174,18 +177,33 @@ namespace NotesManager {
 			}
 			catch (System::IO::IOException^ error)
 			{
+				System::Windows::Forms::DialogResult result = System::Windows::Forms::MessageBox::Show(
+					"Ошибка создания заметки",
+					"Ошибка",
+					System::Windows::Forms::MessageBoxButtons::OK,
+					System::Windows::Forms::MessageBoxIcon::Error);
 				return;
 			}
 			dout->AutoFlush = true;
-			System::Char spec = 0;
+			System::Char spec = 0; // Проверочный символ, код которого является суммой кодов символов пароля.
+			// Он находится в начале файла перед зашифрованным паролем.
 			for (int i = 0; i < key->Length; i++)
 				spec += key[i];
 			System::String^ newkey = System::String::Concat(spec, key);
 			for (int i = 0; i < newkey->Length; i++) {
-				dout->Write(Char(newkey[i] ^ key[i % key->Length]));
+				dout->Write(Char(newkey[i] ^ key[i % key->Length])); // Шифрование проверочного символа с самим паролем
 			}
 			for (int i = 0; i < data->Length; i++) {
-				dout->Write(Char(data[i] ^ key[i % key->Length]));
+				/* Оказывается, при шифровании символа пробела пароль в файле будет показан явно,
+				* поэтому пробел в шифруется так, будто это символ под номером 155.
+				* Он выбран как неиспользуемый.
+				*/
+				if (data[i] == ' ') {
+					dout->Write(Char(155 ^ key[i % key->Length])); 
+				}
+				else {
+					dout->Write(Char(data[i] ^ key[i % key->Length])); // XOR-шифрование
+				}
 			}
 			this->Close();
 			dout->Close();

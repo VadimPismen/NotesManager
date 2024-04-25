@@ -179,51 +179,53 @@ namespace NotesManager {
 		}
 #pragma endregion
 	private: System::Void TextWindow_Load(System::Object^ sender, System::EventArgs^ e) {
-		this->Text = note->Remove(note->Length - 4);;
 
-		//System::IO::StreamReader^ din = System::IO::File::OpenText(note);
-		//System::String^ data = din->ReadToEnd();
-		//din->Close();
-		//System::IO::StreamWriter^ dout = gcnew System::IO::StreamWriter(note);
-		//dout->AutoFlush = true;
-		//for (int i = 0; i < data->Length; i++) {
-		//	dout->Write(data[i] ^ key[i % key->Length]);
-		//}
-		//System::Char spec = 0;
-		//for (int i = 0; i < key->Length; i++)
-		//	spec += key[i];
-		//System::String^ newkey = System::String::Concat(spec, key);
-		//for (int i = 0; i < newkey->Length; i++) {
-		//	dout->Write(newkey[i] ^ key[i % key->Length]);
-		//}
-		//dout->Close();
-
-		System::IO::StreamReader^ din = System::IO::File::OpenText(String::Concat("notes/", note));
-		for (int i = 0; i < keyencr->Length; i++) {
+		this->Text = note->Remove(note->Length - 4); // В имени файла присутствует ".txt", в заголовке окна оно не нужно
+		System::IO::StreamReader^ din;
+		try {
+			din = System::IO::File::OpenText(String::Concat("notes/", note));
+		}
+		catch (System::IO::IOException^ error) { // На случай, если файл во время ввода пароля будет удалён
+			System::Windows::Forms::DialogResult result = System::Windows::Forms::MessageBox::Show(
+				"Похоже, файл удалён",
+				"Ошибка",
+				System::Windows::Forms::MessageBoxButtons::OK,
+				System::Windows::Forms::MessageBoxIcon::Error);
+			this->Close();
+			return;
+		}
+		for (int i = 0; i < keyencr->Length; i++) { // Пропуск хранящегося в файле пароля
 			din->Read();
 		}
-		System::String^ data = din->ReadToEnd();
+		System::String^ data = din->ReadToEnd(); // Чтение информации
 		din->Close();
 		System::String^ decrdata;
 		for (int i = 0; i < data->Length; i++) {
-			decrdata = String::Concat(decrdata, Char(data[i] ^ key[i % key->Length]));
+			/* Оказывается, при шифровании символа пробела пароль в файле будет показан явно,
+			* поэтому пробел в файле шифруется так, будто это символ под номером 155.
+			* Он выбран как неиспользуемый.
+			*/
+			if ((data[i] ^ key[i % key->Length]) == 155)
+				decrdata = String::Concat(decrdata, Char(' ')); // Расшифрование символа 155 как пробел
+			else
+				decrdata = String::Concat(decrdata, Char(data[i] ^ key[i % key->Length])); // Сама расшифровка XOR-методом.
 		}
-		this->TextEditor->Text = decrdata;
+		this->TextEditor->Text = decrdata; // Вставка в редактор текста расшифрованной информации из заметки
 	}
 	private: System::Void fontDialog1_Apply(System::Object^ sender, System::EventArgs^ e) {
 	}
-	private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
-		String^ localkey;
-		String^ localname;
-		if (this->isnewpas->Checked) {
-			localkey = this->Password->Text;
+	private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) { // Сохранение заметки
+		String^ localkey; // Ключ шифрования
+		String^ localname; // Имя файла
+		if (this->isnewpas->Checked) {  // Если пароль нужно заменить...
+			localkey = this->Password->Text; // ...то будет использован новый
 		}
 		else {
-			localkey = key;
+			localkey = key; // Или возьмём старый
 		}
-		if (this->isnewname->Checked) {
-			localname = String::Concat(this->newname->Text, ".txt");
-			if (System::IO::File::Exists(String::Concat("notes/", localname))) {
+		if (this->isnewname->Checked) { // Если нужно изменить имя файла...
+			localname = String::Concat(this->newname->Text, ".txt"); // ...то берём новое из поля ввода
+			if (System::IO::File::Exists(String::Concat("notes/", localname))) { // Вдруг заметка с таким именем уже есть?
 				System::Windows::Forms::DialogResult result = System::Windows::Forms::MessageBox::Show(
 					"Вы хотите перезаписать файл?",
 					"Подтверждение перезаписи",
@@ -234,25 +236,31 @@ namespace NotesManager {
 			}
 		}
 		else {
-			localname = note;
+			localname = note; // Используется старое имя
 		}
-		if (localkey->Length == 0) {
+		if (localkey->Length == 0) { // Нужен непустой пароль
 			return;
 		}
-		String^ data = this->TextEditor->Text;
+		String^ data = this->TextEditor->Text; // Берём написанный в редакторе текст
 		System::IO::StreamWriter^ dout;
 		try {
 			dout = gcnew System::IO::StreamWriter(String::Concat("notes/", localname));
 		}
-		catch (System::IO::IOException^ error)
+		catch (System::IO::IOException^ error) // По какой-то причине он иногда писал, что файл открыт другой программой,
+			// хотя вроде бы все потоки закрывал...
 		{
+			System::Windows::Forms::DialogResult result = System::Windows::Forms::MessageBox::Show(
+				"Похоже, файл открыт другим процессом",
+				"Ошибка",
+				System::Windows::Forms::MessageBoxButtons::OK,
+				System::Windows::Forms::MessageBoxIcon::Error);
 			return;
 		}
-		if (this->isnewname->Checked) {
+		if (this->isnewname->Checked) { // Если нужно новое имя, то файл со старым именем удаляется
 			if (System::IO::File::Exists(String::Concat("notes/", note)))
 				System::IO::File::Delete(String::Concat("notes/", note));
 		}
-		System::Char spec = 0;
+		System::Char spec = 0; // Создаём проверочный символ - сумму кодов символов пароля
 		for (int i = 0; i < localkey->Length; i++)
 			spec += localkey[i];
 		System::String^ newkey = System::String::Concat(spec, localkey);
@@ -261,7 +269,10 @@ namespace NotesManager {
 		}
 		dout->AutoFlush = true;
 		for (int i = 0; i < data->Length; i++) {
-			dout->Write(data[i] ^ localkey[i % localkey->Length]);
+			if (data[i] == ' ')
+				dout->Write(Char(155 ^ localkey[i % localkey->Length])); // Шифруем пробел так, будто это символ номер 155
+			else
+				dout->Write(data[i] ^ localkey[i % localkey->Length]); // XOR-шифрование
 		}
 		this->Close();
 		dout->Close();
@@ -273,7 +284,7 @@ private: System::Void label1_Click(System::Object^ sender, System::EventArgs^ e)
 }
 private: System::Void Password_TextChanged(System::Object^ sender, System::EventArgs^ e) {
 }
-private: System::Void checkBox1_CheckedChanged(System::Object^ sender, System::EventArgs^ e) {
+private: System::Void checkBox1_CheckedChanged(System::Object^ sender, System::EventArgs^ e) { // Показать поле ввода нового пароля
 	if (this->isnewpas->Checked) {
 		this->Password->Visible = true;
 	}
@@ -283,14 +294,15 @@ private: System::Void checkBox1_CheckedChanged(System::Object^ sender, System::E
 }
 private: System::Void Password_TextChanged_1(System::Object^ sender, System::EventArgs^ e) {
 }
-private: System::Void button3_Click(System::Object^ sender, System::EventArgs^ e) {
+private: System::Void button3_Click(System::Object^ sender, System::EventArgs^ e) { // Я когда-то хотел сделать настройку вида текста заметок,
+	// но тогда нужно организовать хранение настроек... Поэтому не используется.
 	if (this->fontDialog1->ShowDialog() == System::Windows::Forms::DialogResult::Cancel)
 		return;
 	this->TextEditor->Font = fontDialog1->Font;
 }
 private: System::Void TextEditor_TextChanged(System::Object^ sender, System::EventArgs^ e) {
 }
-private: System::Void isnewname_CheckedChanged(System::Object^ sender, System::EventArgs^ e) {
+private: System::Void isnewname_CheckedChanged(System::Object^ sender, System::EventArgs^ e) { // Показать поле ввода нового имени заметки
 	if (this->isnewname->Checked) {
 		this->newname->Visible = true;
 	}

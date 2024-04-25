@@ -131,51 +131,48 @@ namespace NotesManager {
 	}
 	private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
 
-		String^ key = this->PasBox->Text;
-		IO::StreamReader^ din = IO::File::OpenText(String::Concat("notes/", note, ".txt"));
-		if (key->Length == 0 || din->BaseStream->Length <= key->Length) {
+		String^ key = this->PasBox->Text; // Взятие пароля из поля ввода
+		IO::StreamReader^ din;
+		try {
+			din = IO::File::OpenText(String::Concat("notes/", note, ".txt"));
+		}
+		catch (System::IO::IOException^ error) { // На случай, если файл во время ввода пароля будет удалён
+			System::Windows::Forms::DialogResult result = System::Windows::Forms::MessageBox::Show(
+				"Похоже, файл удалён",
+				"Ошибка",
+				System::Windows::Forms::MessageBoxButtons::OK,
+				System::Windows::Forms::MessageBoxIcon::Error);
+			this->Close();
 			return;
 		}
-		Char checksum = 0;
+		if (key->Length == 0 || din->BaseStream->Length <= key->Length) { // А вдруг пароль пустой или и вовсе больше самого файла?
+			return;
+		}
+		Char checksum = 0; // Этот символ будет составлять сумму кодов всех символов пароля. Нужен для проверки
 		for (int i = 0; i < key->Length; i++)
 			checksum += key[i];
 		String^ checkedkey = String::Concat(checksum, key);
 
-		String^ checkedkeyencr;
+		String^ checkedkeyencr; // Шифрование строки с проверочным символом и самим паролем
 		for (int i = 0; i < checkedkey->Length; i++)
 			checkedkeyencr = String::Concat(checkedkeyencr, Char(checkedkey[i] ^ key[i % key->Length]));
 
-		//din->BaseStream->Seek(- (checkedkey->Length), IO::SeekOrigin::End);
-		String^ checkstring;
+		String^ checkstring; // Чтение проверочного символа и зашифрованного пароля из файла
 		for (int i = 0; i < checkedkeyencr->Length; i++)
 			checkstring = String::Concat(checkstring,Char(din->Read()));
 		din->Close();
-		
 	
-		if (String::Equals(checkedkeyencr, checkstring)) {
+		if (String::Equals(checkedkeyencr, checkstring)) { // Если совпадает, то пароль верный
 			this->Hide();
-			TextWindow^ text = gcnew TextWindow(String::Concat(note, ".txt"), key, checkedkeyencr);
+			TextWindow^ text = gcnew TextWindow(String::Concat(note, ".txt"), key, checkedkeyencr); // Открытие редактора текста
 			text->ShowDialog(ParentForm);
 			this->Close();
 		}
 
-		//System::String^ key = this->PasBox->Text;
-		//System::IO::StreamReader^ din = System::IO::File::OpenText(note);
-		//unsigned int filesize = din->BaseStream->Length-1;
-		//unsigned int keysize = key->Length;
-		//System::String^ data = din->ReadToEnd();
-		//System::String^ newdata = L"";
-		//for (int i = 0; i < filesize; i++)
-		//	newdata = System::String::Concat(newdata, System::Char(data[i] ^ key[i % keysize]));
-		//this->label1->Text = newdata;
-		//System::Char sum = 0;
-		//for (int i = 0; i < keysize; i++)
-		//	sum += key[i];
-		//this->button1->Text = System::String::Concat(System::Char(sum ^ key[0]));
 	}
 	private: System::Void Password_Load(System::Object^ sender, System::EventArgs^ e) {
 	}
-private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e) {
+private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e) { // Закрыть окно ввода пароля
 	this->Close();
 }
 };

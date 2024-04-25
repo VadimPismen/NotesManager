@@ -119,6 +119,7 @@ namespace NotesManager {
 			this->label1->Size = System::Drawing::Size(304, 39);
 			this->label1->TabIndex = 4;
 			this->label1->Text = L"Список заметок:";
+			this->label1->Click += gcnew System::EventHandler(this, &MyForm::label1_Click);
 			// 
 			// button1
 			// 
@@ -155,7 +156,7 @@ namespace NotesManager {
 			this->Controls->Add(this->list_of_notes);
 			this->Name = L"MyForm";
 			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
-			this->Text = L"Менджер заметок";
+			this->Text = L"Менеджер заметок";
 			this->Load += gcnew System::EventHandler(this, &MyForm::MyForm_Load);
 			this->ResumeLayout(false);
 			this->PerformLayout();
@@ -166,21 +167,18 @@ namespace NotesManager {
 	}
 	private: System::Void richTextBox1_TextChanged(System::Object^ sender, System::EventArgs^ e) {
 	}
-	private: System::Void listBox1_SelectedIndexChanged(System::Object^ sender, System::EventArgs^ e) {
+	private: System::Void listBox1_SelectedIndexChanged(System::Object^ sender, System::EventArgs^ e) { // Включение кнопки "Удалить"
 		if (this->list_of_notes->SelectedIndex != -1) {
 			this->DeleteButton->Enabled = true;
 		}
 
 	}
-private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e) {
+private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e) { // Обновление списка по клику по кнопке "Обновить"
 	loadlist();
 
-	//for (const auto& entry : std::filesystem::directory_iterator("/")) {
-	//	this->listBox1->Items->Add(gcnew System::String(entry.path().c_str()));
-	//}
-
 }
-private: System::Void loadlist() {
+private: System::Void loadlist() { // Обновление спика заметок
+	this->DeleteButton->Enabled = false;
 	this->list_of_notes->Items->Clear();
 	WIN32_FIND_DATA findFileData;
 	HANDLE hFind = FindFirstFile(L"notes/*.txt", &findFileData);
@@ -195,38 +193,40 @@ private: System::Void loadlist() {
 	}
 }
 
-private: System::Void MyForm_Load(System::Object^ sender, System::EventArgs^ e) {
+private: System::Void MyForm_Load(System::Object^ sender, System::EventArgs^ e) { // Загрузка списка при запуске формы
 	loadlist();
 }
-private: System::Void list_of_notes_DoubleClick(System::Object^ sender, System::EventArgs^ e) {
+private: System::Void list_of_notes_DoubleClick(System::Object^ sender, System::EventArgs^ e) { // Открытие окна с вводом пароля для заметки
 	if (this->list_of_notes->SelectedIndex != -1) {
 		System::String^ SelectedElement = this->list_of_notes->Items[this->list_of_notes->SelectedIndex]->ToString();
-		Password^ passwindow = gcnew Password(SelectedElement);
+		Password^ passwindow = gcnew Password(SelectedElement); // В новое окно отправляется название файла заметки
 		passwindow->ShowDialog(this);
 		loadlist();
 	}
 }
-private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
+private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) { // Создание новой заметки
 	NewNote^ addnote = gcnew NewNote();
 	this->Hide();
 	addnote->ShowDialog(this);
 	this->Show();
 	loadlist();
 }
-private: System::Void DeleteButton_Click(System::Object^ sender, System::EventArgs^ e) {
-	if (this->list_of_notes->SelectedIndex != -1) {
+private: System::Void DeleteButton_Click(System::Object^ sender, System::EventArgs^ e) { // Удаление заметки
+	if (this->list_of_notes->SelectedIndex != -1) { // Если какая-нибудь заметка выделена...
 		System::String^ SelectedElement = this->list_of_notes->Items[this->list_of_notes->SelectedIndex]->ToString();
-		System::Windows::Forms::DialogResult result = System::Windows::Forms::MessageBox::Show(
+		System::Windows::Forms::DialogResult result = System::Windows::Forms::MessageBox::Show( // Подтверждение удаления
 			"Вы хотите удалить " + SelectedElement + "?",
 			"Подтверждение удаления",
 			System::Windows::Forms::MessageBoxButtons::OKCancel,
 			System::Windows::Forms::MessageBoxIcon::Information);
 
 		if (result == System::Windows::Forms::DialogResult::OK)
-			if (System::IO::File::Exists(String::Concat("notes/",SelectedElement, ".txt")))
+			if (System::IO::File::Exists(String::Concat("notes/",SelectedElement, ".txt"))) // Проверка существования файла
 				System::IO::File::Delete(String::Concat("notes/", SelectedElement, ".txt"));
 		loadlist();
 	}
+}
+private: System::Void label1_Click(System::Object^ sender, System::EventArgs^ e) {
 }
 };
 }
