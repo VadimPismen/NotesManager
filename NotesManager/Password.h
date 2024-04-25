@@ -12,7 +12,7 @@ namespace NotesManager {
 	using namespace System::Drawing;
 
 	/// <summary>
-	/// Сводка для Password
+	/// РЎРІРѕРґРєР° РґР»СЏ Password
 	/// </summary>
 	public ref class Password : public System::Windows::Forms::Form
 	{
@@ -22,13 +22,13 @@ namespace NotesManager {
 			InitializeComponent();
 			note = a_note;
 			//
-			//TODO: добавьте код конструктора
+			//TODO: РґРѕР±Р°РІСЊС‚Рµ РєРѕРґ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂР°
 			//
 		}
 
 	protected:
 		/// <summary>
-		/// Освободить все используемые ресурсы.
+		/// РћСЃРІРѕР±РѕРґРёС‚СЊ РІСЃРµ РёСЃРїРѕР»СЊР·СѓРµРјС‹Рµ СЂРµСЃСѓСЂСЃС‹.
 		/// </summary>
 		~Password()
 		{
@@ -40,9 +40,9 @@ namespace NotesManager {
 
 	private:
 		/// <summary>
-		/// Обязательная переменная конструктора.
+		/// РћР±СЏР·Р°С‚РµР»СЊРЅР°СЏ РїРµСЂРµРјРµРЅРЅР°СЏ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂР°.
 		/// </summary>
-		System::ComponentModel::Container ^components;
+		System::ComponentModel::Container^ components;
 	private: System::Windows::Forms::TextBox^ PasBox;
 	private: System::Windows::Forms::Label^ label1;
 	private: System::Windows::Forms::Button^ button1;
@@ -51,79 +51,80 @@ namespace NotesManager {
 		   System::String^ note;
 
 #pragma region Windows Form Designer generated code
-		/// <summary>
-		/// Требуемый метод для поддержки конструктора — не изменяйте 
-		/// содержимое этого метода с помощью редактора кода.
-		/// </summary>
-		void InitializeComponent(void)
-		{
-			this->PasBox = (gcnew System::Windows::Forms::TextBox());
-			this->label1 = (gcnew System::Windows::Forms::Label());
-			this->button1 = (gcnew System::Windows::Forms::Button());
-			this->button2 = (gcnew System::Windows::Forms::Button());
-			this->SuspendLayout();
-			// 
-			// PasBox
-			// 
-			this->PasBox->Location = System::Drawing::Point(39, 56);
-			this->PasBox->Name = L"PasBox";
-			this->PasBox->Size = System::Drawing::Size(206, 20);
-			this->PasBox->TabIndex = 0;
-			this->PasBox->UseSystemPasswordChar = true;
-			this->PasBox->TextChanged += gcnew System::EventHandler(this, &Password::PasBox_TextChanged);
-			// 
-			// label1
-			// 
-			this->label1->AutoSize = true;
-			this->label1->Location = System::Drawing::Point(94, 27);
-			this->label1->Name = L"label1";
-			this->label1->Size = System::Drawing::Size(91, 13);
-			this->label1->TabIndex = 1;
-			this->label1->Text = L"Введите пароль:";
-			this->label1->Click += gcnew System::EventHandler(this, &Password::label1_Click);
-			// 
-			// button1
-			// 
-			this->button1->Location = System::Drawing::Point(39, 95);
-			this->button1->Name = L"button1";
-			this->button1->Size = System::Drawing::Size(88, 23);
-			this->button1->TabIndex = 2;
-			this->button1->Text = L"Ввод";
-			this->button1->UseVisualStyleBackColor = true;
-			this->button1->Click += gcnew System::EventHandler(this, &Password::button1_Click);
-			// 
-			// button2
-			// 
-			this->button2->DialogResult = System::Windows::Forms::DialogResult::Cancel;
-			this->button2->Location = System::Drawing::Point(150, 95);
-			this->button2->Name = L"button2";
-			this->button2->Size = System::Drawing::Size(95, 23);
-			this->button2->TabIndex = 3;
-			this->button2->Text = L"Отменить";
-			this->button2->UseVisualStyleBackColor = true;
-			this->button2->Click += gcnew System::EventHandler(this, &Password::button2_Click);
-			// 
-			// Password
-			// 
-			this->AcceptButton = this->button1;
-			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
-			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->CancelButton = this->button2;
-			this->ClientSize = System::Drawing::Size(284, 140);
-			this->ControlBox = false;
-			this->Controls->Add(this->button2);
-			this->Controls->Add(this->button1);
-			this->Controls->Add(this->label1);
-			this->Controls->Add(this->PasBox);
-			this->MaximizeBox = false;
-			this->MinimizeBox = false;
-			this->Name = L"Password";
-			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterParent;
-			this->Load += gcnew System::EventHandler(this, &Password::Password_Load);
-			this->ResumeLayout(false);
-			this->PerformLayout();
+		   /// <summary>
+		   /// РўСЂРµР±СѓРµРјС‹Р№ РјРµС‚РѕРґ РґР»СЏ РїРѕРґРґРµСЂР¶РєРё РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂР° вЂ” РЅРµ РёР·РјРµРЅСЏР№С‚Рµ 
+		   /// СЃРѕРґРµСЂР¶РёРјРѕРµ СЌС‚РѕРіРѕ РјРµС‚РѕРґР° СЃ РїРѕРјРѕС‰СЊСЋ СЂРµРґР°РєС‚РѕСЂР° РєРѕРґР°.
+		   /// </summary>
+		   void InitializeComponent(void)
+		   {
+			   this->PasBox = (gcnew System::Windows::Forms::TextBox());
+			   this->label1 = (gcnew System::Windows::Forms::Label());
+			   this->button1 = (gcnew System::Windows::Forms::Button());
+			   this->button2 = (gcnew System::Windows::Forms::Button());
+			   this->SuspendLayout();
+			   // 
+			   // PasBox
+			   // 
+			   this->PasBox->Location = System::Drawing::Point(39, 56);
+			   this->PasBox->Name = L"PasBox";
+			   this->PasBox->Size = System::Drawing::Size(206, 20);
+			   this->PasBox->TabIndex = 0;
+			   this->PasBox->UseSystemPasswordChar = true;
+			   this->PasBox->TextChanged += gcnew System::EventHandler(this, &Password::PasBox_TextChanged);
+			   // 
+			   // label1
+			   // 
+			   this->label1->AutoSize = true;
+			   this->label1->Location = System::Drawing::Point(94, 27);
+			   this->label1->Name = L"label1";
+			   this->label1->Size = System::Drawing::Size(91, 13);
+			   this->label1->TabIndex = 1;
+			   this->label1->Text = L"Р’РІРµРґРёС‚Рµ РїР°СЂРѕР»СЊ:";
+			   this->label1->Click += gcnew System::EventHandler(this, &Password::label1_Click);
+			   // 
+			   // button1
+			   // 
+			   this->button1->Location = System::Drawing::Point(39, 95);
+			   this->button1->Name = L"button1";
+			   this->button1->Size = System::Drawing::Size(88, 23);
+			   this->button1->TabIndex = 2;
+			   this->button1->Text = L"Р’РІРѕРґ";
+			   this->button1->UseVisualStyleBackColor = true;
+			   this->button1->Click += gcnew System::EventHandler(this, &Password::button1_Click);
+			   // 
+			   // button2
+			   // 
+			   this->button2->DialogResult = System::Windows::Forms::DialogResult::Cancel;
+			   this->button2->Location = System::Drawing::Point(150, 95);
+			   this->button2->Name = L"button2";
+			   this->button2->Size = System::Drawing::Size(95, 23);
+			   this->button2->TabIndex = 3;
+			   this->button2->Text = L"РћС‚РјРµРЅРёС‚СЊ";
+			   this->button2->UseVisualStyleBackColor = true;
+			   this->button2->Click += gcnew System::EventHandler(this, &Password::button2_Click);
+			   // 
+			   // Password
+			   // 
+			   this->AcceptButton = this->button1;
+			   this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
+			   this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
+			   this->CancelButton = this->button2;
+			   this->ClientSize = System::Drawing::Size(284, 140);
+			   this->ControlBox = false;
+			   this->Controls->Add(this->button2);
+			   this->Controls->Add(this->button1);
+			   this->Controls->Add(this->label1);
+			   this->Controls->Add(this->PasBox);
+			   this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedDialog;
+			   this->MaximizeBox = false;
+			   this->MinimizeBox = false;
+			   this->Name = L"Password";
+			   this->StartPosition = System::Windows::Forms::FormStartPosition::CenterParent;
+			   this->Load += gcnew System::EventHandler(this, &Password::Password_Load);
+			   this->ResumeLayout(false);
+			   this->PerformLayout();
 
-		}
+		   }
 #pragma endregion
 	private: System::Void label1_Click(System::Object^ sender, System::EventArgs^ e) {
 	}
@@ -131,40 +132,40 @@ namespace NotesManager {
 	}
 	private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
 
-		String^ key = this->PasBox->Text; // Взятие пароля из поля ввода
+		String^ key = this->PasBox->Text; // Р’Р·СЏС‚РёРµ РїР°СЂРѕР»СЏ РёР· РїРѕР»СЏ РІРІРѕРґР°
 		IO::StreamReader^ din;
 		try {
 			din = IO::File::OpenText(String::Concat("notes/", note, ".txt"));
 		}
-		catch (System::IO::IOException^ error) { // На случай, если файл во время ввода пароля будет удалён
+		catch (System::IO::IOException^ error) { // РќР° СЃР»СѓС‡Р°Р№, РµСЃР»Рё С„Р°Р№Р» РІРѕ РІСЂРµРјСЏ РІРІРѕРґР° РїР°СЂРѕР»СЏ Р±СѓРґРµС‚ СѓРґР°Р»С‘РЅ
 			System::Windows::Forms::DialogResult result = System::Windows::Forms::MessageBox::Show(
-				"Похоже, файл удалён",
-				"Ошибка",
+				"РџРѕС…РѕР¶Рµ, С„Р°Р№Р» СѓРґР°Р»С‘РЅ",
+				"РћС€РёР±РєР°",
 				System::Windows::Forms::MessageBoxButtons::OK,
 				System::Windows::Forms::MessageBoxIcon::Error);
 			this->Close();
 			return;
 		}
-		if (key->Length == 0 || din->BaseStream->Length <= key->Length) { // А вдруг пароль пустой или и вовсе больше самого файла?
+		if (key->Length == 0 || din->BaseStream->Length <= key->Length) { // Рђ РІРґСЂСѓРі РїР°СЂРѕР»СЊ РїСѓСЃС‚РѕР№ РёР»Рё Рё РІРѕРІСЃРµ Р±РѕР»СЊС€Рµ СЃР°РјРѕРіРѕ С„Р°Р№Р»Р°?
 			return;
 		}
-		Char checksum = 0; // Этот символ будет составлять сумму кодов всех символов пароля. Нужен для проверки
+		Char checksum = 0; // Р­С‚РѕС‚ СЃРёРјРІРѕР» Р±СѓРґРµС‚ СЃРѕСЃС‚Р°РІР»СЏС‚СЊ СЃСѓРјРјСѓ РєРѕРґРѕРІ РІСЃРµС… СЃРёРјРІРѕР»РѕРІ РїР°СЂРѕР»СЏ. РќСѓР¶РµРЅ РґР»СЏ РїСЂРѕРІРµСЂРєРё
 		for (int i = 0; i < key->Length; i++)
 			checksum += key[i];
 		String^ checkedkey = String::Concat(checksum, key);
 
-		String^ checkedkeyencr; // Шифрование строки с проверочным символом и самим паролем
+		String^ checkedkeyencr; // РЁРёС„СЂРѕРІР°РЅРёРµ СЃС‚СЂРѕРєРё СЃ РїСЂРѕРІРµСЂРѕС‡РЅС‹Рј СЃРёРјРІРѕР»РѕРј Рё СЃР°РјРёРј РїР°СЂРѕР»РµРј
 		for (int i = 0; i < checkedkey->Length; i++)
 			checkedkeyencr = String::Concat(checkedkeyencr, Char(checkedkey[i] ^ key[i % key->Length]));
 
-		String^ checkstring; // Чтение проверочного символа и зашифрованного пароля из файла
+		String^ checkstring; // Р§С‚РµРЅРёРµ РїСЂРѕРІРµСЂРѕС‡РЅРѕРіРѕ СЃРёРјРІРѕР»Р° Рё Р·Р°С€РёС„СЂРѕРІР°РЅРЅРѕРіРѕ РїР°СЂРѕР»СЏ РёР· С„Р°Р№Р»Р°
 		for (int i = 0; i < checkedkeyencr->Length; i++)
-			checkstring = String::Concat(checkstring,Char(din->Read()));
+			checkstring = String::Concat(checkstring, Char(din->Read()));
 		din->Close();
-	
-		if (String::Equals(checkedkeyencr, checkstring)) { // Если совпадает, то пароль верный
+
+		if (String::Equals(checkedkeyencr, checkstring)) { // Р•СЃР»Рё СЃРѕРІРїР°РґР°РµС‚, С‚Рѕ РїР°СЂРѕР»СЊ РІРµСЂРЅС‹Р№
 			this->Hide();
-			TextWindow^ text = gcnew TextWindow(String::Concat(note, ".txt"), key, checkedkeyencr); // Открытие редактора текста
+			TextWindow^ text = gcnew TextWindow(String::Concat(note, ".txt"), key, checkedkeyencr); // РћС‚РєСЂС‹С‚РёРµ СЂРµРґР°РєС‚РѕСЂР° С‚РµРєСЃС‚Р°
 			text->ShowDialog(ParentForm);
 			this->Close();
 		}
@@ -172,8 +173,8 @@ namespace NotesManager {
 	}
 	private: System::Void Password_Load(System::Object^ sender, System::EventArgs^ e) {
 	}
-private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e) { // Закрыть окно ввода пароля
-	this->Close();
-}
-};
+	private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e) { // Р—Р°РєСЂС‹С‚СЊ РѕРєРЅРѕ РІРІРѕРґР° РїР°СЂРѕР»СЏ
+		this->Close();
+	}
+	};
 }
