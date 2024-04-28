@@ -205,8 +205,8 @@ namespace NotesManager {
 					dout->Write(Char(data[i] ^ key[i % key->Length])); // XOR-шифрование
 				}
 			}
-			this->Close();
 			dout->Close();
+			this->Close();
 	}
 }
 private: System::Void TextEditor_TextChanged(System::Object^ sender, System::EventArgs^ e) {
