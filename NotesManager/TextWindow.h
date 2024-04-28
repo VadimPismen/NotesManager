@@ -248,6 +248,7 @@ namespace NotesManager {
 		}
 		catch (System::IO::IOException^ error) // По какой-то причине он иногда писал, что файл открыт другой программой,
 			// хотя вроде бы все потоки закрывал...
+			// UPD: Похоже, надо было просто переставить местами две последние строки этого метода...
 		{
 			System::Windows::Forms::DialogResult result = System::Windows::Forms::MessageBox::Show(
 				"Похоже, файл открыт другим процессом",
@@ -264,18 +265,18 @@ namespace NotesManager {
 		for (int i = 0; i < localkey->Length; i++)
 			spec += localkey[i];
 		System::String^ newkey = System::String::Concat(spec, localkey);
+		dout->AutoFlush = true;
 		for (int i = 0; i < newkey->Length; i++) {
 			dout->Write(newkey[i] ^ localkey[i % localkey->Length]);
 		}
-		dout->AutoFlush = true;
 		for (int i = 0; i < data->Length; i++) {
 			if (data[i] == ' ')
 				dout->Write(Char(155 ^ localkey[i % localkey->Length])); // Шифруем пробел так, будто это символ номер 155
 			else
 				dout->Write(data[i] ^ localkey[i % localkey->Length]); // XOR-шифрование
 		}
-		this->Close();
 		dout->Close();
+		this->Close();
 
 }
 private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e) {
